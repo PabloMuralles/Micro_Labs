@@ -1,9 +1,11 @@
 Preguntas:
 1. Cuando se genera el archivo obj a partir del archivo “.asm” ¿Qué información
 nos muestra en consola y qué significa?
-Nos muestra el archivo que ensamblo esto para poder corroborar el archivo que deseamos ensamblar hayamos ensamblado,
-mensajes de error en este apartado nos mostrara cuando declaramos mal una variable por ejemplo en este lab si el nombre le ponemos BD en vez de DB,
-Mensajes de advertencia algún aviso que puede ser que no vaya a funcionar bien y la memoria restante 
+Assembling file:Nos muestra el archivo que ensamblo esto para poder corroborar el archivo que deseamos ensamblar hayamos ensamblado,
+Mensajes de error: en este apartado nos mostrara cuando declaramos mal una variable por ejemplo en este lab si el nombre le ponemos BD en vez de DB,
+Mensajes de advertencia: algún aviso que puede ser que no vaya a funcionar bien
+Passes: Archivos que pasaron correctamente el ensamblaje
+Remaining memory: la memoria restante
 2. ¿En qué punto se crea el archivo ejecutable?
 Cuando pasamos el archivo por el TLINK.exe
 3. ¿Cuál es la interrupción utilizada para imprimir una cadena de caracteres?
