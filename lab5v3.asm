@@ -8,9 +8,7 @@
 	x DB 02h
 	i DW 00h
 	carry DW 00h
-	y DB 00h
 	num1 DB ?
-	resultado DW ? 
 	centena DB 00h
 	decena DB 00h
 	unidad DB 00h
