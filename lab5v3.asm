@@ -21,13 +21,14 @@ program:
 	MOV DS,AX								; iniciliza el segmento de datos
 	CALL PEDIR
 	;evaluar que el numero no sea mayor  
-	CMP BX,7Fh
-	JL hacer1
-	CMP BX,7Fh
+	CMP BX,7Fh								; si es menor a 126 se hace algo 						
+	JL hacer1			
+	CMP BX,7Fh								; si es igual a 127 se hace algo
 	JE hacer2
 	CMP BX,80h
-	JE hacer3
+	JE hacer3								; si es igual a 128 se hace algo
 	JMP erro
+	; se hace solo para menores a 126
 	hacer1:
 		;imprimir salto de linea
 		MOV DL, 0AH
@@ -45,6 +46,7 @@ program:
 			CALL MULTIPLICAR
 			INC x
 		JMP ciclo
+	; se hace para el 127
 	hacer2:
 	;imprimir salto de linea
 	MOV DL, 0AH
@@ -64,12 +66,13 @@ program:
 		INC x
 	JMP variante1
 	conti:
-		MOV x, 7Fh
+		MOV x, 7Fh									; el resultado de 126 se multiplica por 127
 		CALL MULTIPLICAR
 		JMP disp
 	
-	saltar1:
+	saltar1:										;salto intermedio
 	JMP disp
+	; se hace para 128
 	hacer3:
 	;imprimir salto de linea
 	MOV DL, 0AH
@@ -88,7 +91,7 @@ program:
 		CALL MULTIPLICAR
 		INC x
 	JMP variante2
-	conti2:
+	conti2:											;el resultado de 126 se multiplica por 127 y luego por 128
 		MOV x, 7Fh
 		CALL MULTIPLICAR
 		MOV x, 80h
