@@ -1,6 +1,6 @@
  CalcularDimension MACRO	filas, columnas, dimension
 	xor	bx,bx		;limpiar registros
-	xor ax,bx
+	xor ax,ax
 
 	mov bl, filas
 	mov al, columnas
@@ -20,7 +20,7 @@ Mapeo MACRO i, j, filas, columnas, tamano, resultado
 	xor cx,cx		
 	;primera parte de la formula
 	mov al,i			;pasar a ax el contador con la posicion de la fila que se desea saber
-	mul filas			;multiplicar ax por la cantidad de elementos que tiene una fila
+	mul columnas			;multiplicar ax por la cantidad de elementos que tiene una fila
 	mul tamano			;mutiplicar ax por el tamaño de dato
 	mov cl,al			;guardar el resultado en cl
 	;segunda parte de la formula
