@@ -1,4 +1,4 @@
- CalcularDimension MACRO	filas, columnas, dimension
+CalcularDimension MACRO	filas, columnas, dimension
 	xor	bx,bx		;limpiar registros
 	xor ax,ax
 
@@ -47,7 +47,8 @@ include	\masm32\include\masm32rt.inc
 	text2 DB	"Ingrese M, solo numeros de un digito",0
 	text3 DB	"Ingrese data con la que desea llenar la matriz",0
 	textDimension DB	"Tamano de la matriz:",0
-	textMatriz DB	"Matriz:",0
+	textMatriz DB	"Matriz Ordenada:",0
+	textMatriz2 DB	"Matriz Original:",0
 	i DB 0,0
 	j DB 0,0
 	filas DB 0,0
@@ -57,6 +58,7 @@ include	\masm32\include\masm32rt.inc
 	temp DB 0,0
 	largoDatos DB 1,0
 	textoIngreso DB 500 dup(0),0
+	matriz2 DB 500 dup(0),0
 	matriz DB 500 dup(0),0
 
 .data?	; se usa para variables no inicializada
@@ -123,6 +125,14 @@ LLENARMATRIZ PROC NEAR
     
 LLENARMATRIZ ENDP
 
+call COPIARMATRIZ 
+
+call	ORDENAR	
+ 
+print chr$(13,10)								;se imprime salto de linea
+INVOKE	StdOut, ADDR	textMatriz2 
+call	IMPRIMIRMATRIZ2		
+
 print chr$(13,10)								;se imprime salto de linea
 INVOKE	StdOut, ADDR	textMatriz 
 call	IMPRIMIRMATRIZ	
@@ -140,7 +150,7 @@ cicloRows:
 		cicloColumns:
 
 			Mapeo i, j, filas, columnas, largoDatos, resultado
-			lea edi,matriz	
+			lea edi,matriz
 
 			call	 AUMENTARINDICE	
 
@@ -159,6 +169,38 @@ cicloRows:
 		jl cicloRows									; si es menor es que no a llegado y se repite el ciclo filas y si llego se sale
 RET
 IMPRIMIRMATRIZ ENDP
+
+IMPRIMIRMATRIZ2 PROC	
+mov j,00h
+mov i,00h
+
+cicloRows1:
+		 
+		mov j,00h										;iniciar de nuevo el contador de columnas									
+		print chr$(13,10)								;se imprime salto de linea
+
+		cicloColumns1:
+
+			Mapeo i, j, filas, columnas, largoDatos, resultado
+			lea edi,matriz2
+
+			call	 AUMENTARINDICE	
+
+			call	IMPRIMIRPOS	
+	
+
+
+		inc j											; se incrementa el contador de columnas
+		xor bx,bx										; se limpia el registros
+		mov bl,j										; se pasa a bl el contador de columnas para poder comparar
+		cmp bl,columnas									; se compara si el contador columnas llego al final  de las columnas
+		jl cicloColumns1								; si es menor es que no ha llego al final y se repite el cilo columnas
+		inc i											; si no es menor se incrementan la filaes 
+		mov bl,i										; se mueve el contador filas a bl para comparar  
+		cmp bl, filas									;se compara bl con la cantidad de filas para ver si se llego al final de las filas
+		jl cicloRows1									; si es menor es que no a llegado y se repite el ciclo filas y si llego se sale
+RET
+IMPRIMIRMATRIZ2 ENDP
 
 ;procedimiento para incrementar la posicion de la cadena de la matriz hasta la que devuelva el mapeo 
 AUMENTARINDICE PROC
@@ -191,6 +233,84 @@ print chr$(9)
 
 RET
 IMPRIMIRPOS ENDP	
+
+COPIARMATRIZ PROC
+
+lea edi, matriz
+lea esi, matriz2
+xor cx,cx
+ 
+
+ciclos2:
+
+	xor bx,bx
+	cmp cl,dimension
+	je retornars
+	mov bl,[edi]
+	mov [esi],bl
+	inc edi
+	inc esi
+	inc cx
+	jmp ciclos2
+
+
+retornars:
+RET
+COPIARMATRIZ ENDP
+
+
+
+ORDENAR PROC
+mov j,00h
+mov i,00h
+xor cx,cx
+mov cl, dimension
+dec cl
+jmp ciclo22
+
+ciclo21:
+	inc i 
+
+	ciclo22:
+		lea esi, matriz
+		lea edi, matriz
+		inc edi
+		cmp cl,i
+		je return21
+		mov j, 00h
+		jmp ciclo24
+
+			ciclo23:
+				inc j 
+
+				ciclo24:
+					xor dx,dx
+					mov dl, dimension
+					dec dl
+					sub dl, i
+					cmp dl, j
+					je ciclo21
+					xor eax,eax
+					xor ebx,ebx
+					mov al, [esi]
+					mov bl, [edi]
+					cmp al, bl
+					jg ciclo25
+					jmp ciclo26
+
+						ciclo25:	 
+						mov [edi],al
+						mov [esi],bl
+
+							ciclo26:
+								inc edi
+								inc esi
+								jmp ciclo23
+return21:
+RET
+ORDENAR ENDP
+
+
 
 	terminar:
 	;finalizar programa
